@@ -1,0 +1,3 @@
+D:\LabsFolder\SecurityLabs\LB1\LB1\obj\Debug\LB1.njsproj.CoreCompileInputs.cache
+D:\LabsFolder\SecurityLabs\LB1\LB1\bin\Microsoft.NodejsTools.WebRole.dll
+D:\LabsFolder\SecurityLabs\LB1\LB1\obj\Debug\LB1.njsprojAssemblyReference.cache
