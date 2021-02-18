@@ -10,7 +10,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var hash_route = require('./routes/hash_route');
-const { sha256 } = require('C:\\Users\\Andrei\\node_modules\\js-sha256');
+const { sha256 } = require('js-sha256').sha256;
 
 var app = express();
 
