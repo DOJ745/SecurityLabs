@@ -8,7 +8,7 @@
  **/
 exports.rootGET = function() {
   return new Promise(function(resolve, reject) {
-    resolve("{message: 'Hello world!'}");
+    resolve("Hello world!");
   });
 }
 
