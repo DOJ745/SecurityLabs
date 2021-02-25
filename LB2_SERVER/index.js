@@ -3,8 +3,6 @@
 var path = require('path');
 var http = require('http');
 
-//const bodyParser = require('body-parser');
-
 var oas3Tools = require('oas3-tools');
 var serverPort = 8080;
 
@@ -17,7 +15,6 @@ var options = {
 
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
-
 
 // Initialize the Swagger middleware
 http.createServer(app).listen(serverPort, function () {
