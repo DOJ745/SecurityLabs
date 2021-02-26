@@ -38,7 +38,7 @@ var app = expressAppConfig.getApp();
 
 // Launch https server
 
-https.createServer(httpsOptions, app).listen(serverPort, function () {
+https.createServer(options, app).listen(serverPort, function () {
     console.log('Your HTTPS server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
     console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
 });
