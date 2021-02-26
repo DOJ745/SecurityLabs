@@ -1,0 +1,10 @@
+{
+	"name":"nodehttps",
+	"version":"0.0.4",
+	"description":"simple HTTPS access",
+	"dependencies":{
+
+	"express":"4.x.x"
+}
+
+}

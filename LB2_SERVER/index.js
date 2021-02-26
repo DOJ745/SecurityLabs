@@ -8,39 +8,23 @@ var https = require('https');
 var oas3Tools = require('oas3-tools');
 var serverPort = 8080;
 
-//https configurations
-
-  var options = {
-    key: fs.readFileSync('HTTPS/server-key.pem'),
-    cert: fs.readFileSync('HTTPS/server-crt.pem'),
-    ca: fs.readFileSync('HTTPS/ca-crt.pem'),
-    requestCert: true, 
-    rejectUnauthorized: true
-};
-
-/*
-httpsOptions = {
-    key: fs.readFileSync("server.key"), // путь к ключу
-    cert: fs.readFileSync("server.crt") // путь к сертификату
-}*/
-
-
 // swaggerRouter configuration
 var options = {
     routing: {
         controllers: path.join(__dirname, './controllers')
     },
+    key: fs.readFileSync('HTTPS2/key.pem'),
+    cert: fs.readFileSync('HTTPS2/cert.pem'),
+    requestCert: false, 
+    rejectUnauthorized: false
 };
 
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
 
-// Launch https server
-
 https.createServer(options, app).listen(serverPort, function () {
-
-    console.log('Your HTTPS server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+    console.log('Your HTTPS server is listening on port %d (https://localhost:%d)', serverPort, serverPort);
+    console.log('Swagger-ui is available on https://localhost:%d/docs', serverPort);
 });
 
 
