@@ -1,9 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MyApp());
+
+class MyForm extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => MyFormState();
 }
+
+class MyFormState extends State {
+  final _formKey = GlobalKey<FormState>();
+
+  String ip = "";
+  String port = "";
+  String message = "";
+
+  Widget build(BuildContext context) {
+    return Container(padding: EdgeInsets.all(10.0), child: new Form(key: _formKey, child: new Column(
+      children: <Widget>[
+
+      new Text('IP:', style: TextStyle(fontSize: 20.0),),
+      new TextFormField(validator: (value){
+        if (value.isEmpty) return 'Enter IP!';
+
+        try { ip = value.toString(); } catch(e) {
+          ip = null;
+          return e.toString();
+        }
+      }),
+
+      new SizedBox(height: 20.0),
+
+        new Text('PORT:', style: TextStyle(fontSize: 20.0),),
+        new TextFormField(validator: (value){
+          if (value.isEmpty) return 'Enter Port!';
+
+          try { port = value.toString(); } catch(e) {
+            port = null;
+            return e.toString();
+          }
+        }),
+
+        new SizedBox(height: 20.0),
+
+        new Text('Message:', style: TextStyle(fontSize: 20.0),),
+        new TextFormField(validator: (value){
+          if (value.isEmpty) return 'Enter Message!';
+
+          try { message = value.toString(); } catch(e) {
+            message = null;
+            return e.toString();
+          }
+        }),
+
+        new SizedBox(height: 20.0),
+
+      new RaisedButton(onPressed: () {
+        if(_formKey.currentState.validate()) Scaffold.of(context).showSnackBar(SnackBar(content: Text('Success'), backgroundColor: Colors.green,));
+      }, child: Text('Send'), color: Colors.blue, textColor: Colors.white,),
+    ],)));
+  }
+
+}
+
+void main() => runApp(
+    new MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: new Scaffold(
+            appBar: new AppBar(title: new Text('LB2_3')),
+            body: new MyForm()
+        )
+    )
+);
+
+/*
+void main() {
+  runApp(MaterialApp(
+      home:  Scaffold(
+        body: TextField(),
+        appBar: AppBar(title: Text("LB2_3")),)
+  ));
+}*/
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

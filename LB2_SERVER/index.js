@@ -10,14 +10,13 @@ var serverPort = 8080;
 
 //https configurations
 
-var key = fs.readFileSync('encryption/private.key');
-var cert = fs.readFileSync( 'encryption/server.crt' );
-//var ca = fs.readFileSync( 'encryption/intermediate.crt' );
-
-var options = {
-    key: key,
-    cert: cert
-  };
+  var options = {
+    key: fs.readFileSync('HTTPS/server-key.pem'),
+    cert: fs.readFileSync('HTTPS/server-crt.pem'),
+    ca: fs.readFileSync('HTTPS/ca-crt.pem'),
+    requestCert: true, 
+    rejectUnauthorized: true
+};
 
 /*
 httpsOptions = {
@@ -39,6 +38,7 @@ var app = expressAppConfig.getApp();
 // Launch https server
 
 https.createServer(options, app).listen(serverPort, function () {
+
     console.log('Your HTTPS server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
     console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
 });
