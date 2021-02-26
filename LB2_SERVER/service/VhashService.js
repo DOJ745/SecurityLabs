@@ -15,7 +15,6 @@ exports.vhashPOST = function(req) {
   var generHash = req.body.generHash;
 
   var hash = crypto.createHash("sha256").update(data, "utf-8").digest("hex");
-  //data = data.append(hash);
   var response = {};
 
   
