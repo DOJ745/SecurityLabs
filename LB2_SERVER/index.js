@@ -14,9 +14,9 @@ var options = {
         controllers: path.join(__dirname, './controllers')
     },
     key: fs.readFileSync('HTTPS2/key.pem'),
-    cert: fs.readFileSync('HTTPS2/cert.pem'),
-    requestCert: false, 
-    rejectUnauthorized: false
+    cert: fs.readFileSync('HTTPS2/cert.pem')
+    //requestCert: false, 
+    //rejectUnauthorized: false
 };
 
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
