@@ -6,9 +6,22 @@
  *
  * no response value expected for this operation
  **/
-exports.hashPOST = function() {
+const crypto = require('crypto');
+
+exports.hashPOST = function(req) {
   return new Promise(function(resolve, reject) {
-    resolve();
+
+  var data = req.body.data;
+  var hash = crypto.createHash("sha256").update(data, "utf-8").digest("hex")
+
+  var response = {};
+  response['application/json'] = { "hash": hash };
+
+  if (Object.keys(response).length > 0) {
+    resolve(response[Object.keys(response)[0]]);
+  } else { resolve("Empty resolve"); }
+
   });
 }
+
 

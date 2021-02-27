@@ -11,7 +11,6 @@ exports.hashPOST = function(req) {
   return new Promise(function(resolve, reject) {
 
   var data = req.body.data;
-  //console.log(data);
   var hash = crypto.createHash("sha256").update(data, "utf-8").digest("hex")
 
   var response = {};
