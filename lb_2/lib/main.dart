@@ -5,22 +5,31 @@ import 'package:http/http.dart' as http;
 class MyForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MyFormState();
+
+  //final String url;
+  //MyForm({String url}):url = url;
 }
 
+
 class MyFormState extends State {
+
   final _formKey = GlobalKey<FormState>();
 
-
+  String _url, body;
+  int statusCode;
 
   String ip = "";
   String port = "";
   String message = "";
+  String hash = "";
 
   Widget build(BuildContext context) {
     return Container(padding: EdgeInsets.all(10.0), child: new Form(key: _formKey, child: new Column(
       children: <Widget>[
 
-      new Text('IP:', style: TextStyle(fontSize: 20.0),),
+      new Text('IP or DNS name:', style: TextStyle(fontSize: 20.0),),
+
+      // ignore: missing_return
       new TextFormField(validator: (value){
         if (value.isEmpty) return 'Enter IP!';
 
@@ -33,6 +42,8 @@ class MyFormState extends State {
       new SizedBox(height: 20.0),
 
         new Text('PORT:', style: TextStyle(fontSize: 20.0),),
+
+        // ignore: missing_return
         new TextFormField(validator: (value){
           if (value.isEmpty) return 'Enter Port!';
 
@@ -45,6 +56,8 @@ class MyFormState extends State {
         new SizedBox(height: 20.0),
 
         new Text('Message:', style: TextStyle(fontSize: 20.0),),
+
+        // ignore: missing_return
         new TextFormField(validator: (value){
           if (value.isEmpty) return 'Enter Message!';
 
@@ -56,12 +69,27 @@ class MyFormState extends State {
 
         new SizedBox(height: 20.0),
 
-      new RaisedButton(onPressed: () {
+        new Text('Hash:', style: TextStyle(fontSize: 20.0),),
+
+        // ignore: missing_return
+        new TextFormField(validator: (value){
+          if (value.isEmpty) return 'Enter Hash!';
+
+          try { hash = value.toString(); } catch(e) {
+            hash = null;
+            return e.toString();
+          }
+        }),
+
+      new RaisedButton(onPressed: () async {
         if(_formKey.currentState.validate()) Scaffold.of(context).showSnackBar(SnackBar(content: Text('Success'), backgroundColor: Colors.green,));
 
-        var response = http.post('https://' + ip + ":" + port + "/vhash", body: {'data':message,'generHash':'10'});
-        print("Response status: ${response.statusCode}");
-        print("Response body: ${response.body}");
+        http.Response res = await http.post('https://' + ip + ":" + port + "/vhash",
+            body: {'data':message, 'generHash': hash},
+            headers: {'Accept':'application/json'} );
+
+        print("Response status: ${res.statusCode}");
+        print("Response body: ${res.body}");
 
       }, child: Text('Send'), color: Colors.blue, textColor: Colors.white,),
     ],)));
