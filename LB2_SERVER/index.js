@@ -13,8 +13,12 @@ var options = {
     routing: {
         controllers: path.join(__dirname, './controllers')
     },
-    key: fs.readFileSync('HTTPS2/key.pem'),
-    cert: fs.readFileSync('HTTPS2/cert.pem')
+    //key: fs.readFileSync('HTTPS2/key.pem'),
+    //cert: fs.readFileSync('HTTPS2/cert.pem')
+
+    key: fs.readFileSync('HTTPS2/server-key.pem'),
+    cert: fs.readFileSync('HTTPS2/server-crt.pem'),
+    ca: fs.readFileSync('HTTPS2/ca-crt.pem')
     //requestCert: false, 
     //rejectUnauthorized: false
 };
