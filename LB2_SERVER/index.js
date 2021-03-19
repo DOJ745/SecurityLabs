@@ -16,9 +16,14 @@ var options = {
     //key: fs.readFileSync('HTTPS2/key.pem'),
     //cert: fs.readFileSync('HTTPS2/cert.pem')
 
-    key: fs.readFileSync('HTTPS2/server-key.pem'),
-    cert: fs.readFileSync('HTTPS2/server-crt.pem'),
-    ca: fs.readFileSync('HTTPS2/ca-crt.pem')
+    //key: fs.readFileSync('HTTPS2/server-key.pem'),
+    //cert: fs.readFileSync('HTTPS2/server-crt.pem')
+    //ca: fs.readFileSync('HTTPS2/ca-crt.pem')
+
+    key: fs.readFileSync('HTTPS3/SITE-KEY.key'),
+    cert: fs.readFileSync('HTTPS3/SITE.by.crt'),
+    ca: fs.readFileSync('HTTPS3/BSTU-R-CA.crt')
+
     //requestCert: false, 
     //rejectUnauthorized: false
 };
