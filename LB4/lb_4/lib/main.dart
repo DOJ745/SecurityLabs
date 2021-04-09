@@ -1,102 +1,120 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(
+    new MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+            appBar: AppBar(title: Text('LB2_3')),
+            body: MyForm()
+        )
+    )
+);
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+class MyForm extends StatelessWidget {
+  MyForm({Key key, this.statusCode}) : super(key: key);
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  final _formKey = GlobalKey<FormState>();
 
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final int statusCode;
+  String ip = "";
+  String port = "";
+  String messageSend = "";
+  String hash = "";
 
   static const platform = const MethodChannel('samples.flutter.dev/android_hash');
-  // Get hash result
-  String _androidSHA256Hash = '123';
 
   Future<void> _getHash() async {
     String androidSHA256Hash;
     try {
-      Map map = { "hash" : "test"};
+      Map map = { "hash" : messageSend };
       final String result = await platform.invokeMethod<String>('getHash', map);
       androidSHA256Hash = result;
     } on PlatformException catch (e) {
       androidSHA256Hash = "Failed to get hash: '${e.message}'.";
     }
-
-    setState( () { _androidSHA256Hash = androidSHA256Hash; } );
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+    hash = androidSHA256Hash;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              child: Text('Get hash'),
-              onPressed: _getHash,
-            ),
-            Text(_androidSHA256Hash),
-          ],
-        ),
-      ),
+    return Container(
+        padding: EdgeInsets.all(10.0),
+        child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'IP or DNS name:',
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                // ignore: missing_return
+                TextFormField(validator: (value)
+                {
+                  if (value.isEmpty) return 'Enter IP!';
+                  try { ip = value.toString(); } catch(e) {
+                    ip = null;
+                    return e.toString();
+                  }
+                }),
+                SizedBox(height: 20.0),
+                Text(
+                  'PORT:',
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                // ignore: missing_return
+                TextFormField(validator: (value) {
+                  if (value.isEmpty) return 'Enter Port!';
+                  try { port = value.toString(); } catch(e) {
+                    port = null;
+                    return e.toString();
+                  }
+                }),
+                SizedBox(height: 20.0),
+                Text('Message:', style: TextStyle(fontSize: 20.0),),
+                // ignore: missing_return
+                TextFormField(validator: (value) {
+                  if (value.isEmpty) return 'Enter Message!';
+                  try { messageSend = value.toString(); } catch(e) {
+                    messageSend = null;
+                    return e.toString();
+                  }
+                }
+                ),
+                RaisedButton(onPressed: () async {
+                  if(_formKey.currentState.validate()) Scaffold.of(context).
+                  showSnackBar(
+                      SnackBar(
+                        content: Text('Success'),
+                        backgroundColor: Colors.green,
+                      )
+                  );
+
+                  _getHash();
+                  HttpClient client = new HttpClient();
+                  client.badCertificateCallback =((X509Certificate cert, String host, int port) => true);
+
+                  String url = "https://" + ip + ":" + port + "/vhash";
+                  Map map = { "data" : messageSend , "generHash" : hash.toLowerCase() };
+                  HttpClientRequest request = await client.postUrl(Uri.parse(url));
+
+                  request.headers.set('content-type', 'application/json');
+                  request.add(utf8.encode(json.encode(map)));
+
+                  HttpClientResponse response = await request.close();
+                  String reply = await response.transform(utf8.decoder).join();
+                  print(reply + "\n---DEFAULT VALUE: " + hash + "---\n");
+                },
+                  child: Text('Send'),
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                ),
+              ],
+            )
+        )
     );
   }
 }
