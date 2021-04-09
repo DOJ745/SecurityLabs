@@ -84,37 +84,29 @@ class MyFormState extends State {
                         backgroundColor: Colors.green,
                       )
                   );
+                  HttpClient client = new HttpClient();
+                  client.badCertificateCallback =((X509Certificate cert, String host, int port) => true);
 
-        /*
-        http.Response res = await http.post('https://' + ip + ":" + port + "/vhash",
-            body: {'data': message, 'generHash': hash},
-            headers: { 'Accept':'application/json' });
+                  String url = "https://" + ip + ":" + port + "/vhash";
+                  Map map = { "data" : message , "generHash" : hash };
+                  HttpClientRequest request = await client.postUrl(Uri.parse(url));
 
-        print("Response status: ${res.statusCode}");
-        print("Response body: ${res.body}");
-         */
+                  request.headers.set('content-type', 'application/json');
+                  request.add(utf8.encode(json.encode(map)));
 
-        HttpClient client = new HttpClient();
-        client.badCertificateCallback =((X509Certificate cert, String host, int port) => true);
-
-        String url = "https://" + ip + ":" + port + "/vhash";
-        Map map = { "data" : message , "generHash" : hash };
-        HttpClientRequest request = await client.postUrl(Uri.parse(url));
-
-        request.headers.set('content-type', 'application/json');
-        request.add(utf8.encode(json.encode(map)));
-
-        HttpClientResponse response = await request.close();
-        String reply = await response.transform(utf8.decoder).join();
-        print(reply);
-
-        }, child: Text('Send'), color: Colors.blue, textColor: Colors.white,),
-    ],
-    )
-    )
+                  HttpClientResponse response = await request.close();
+                  String reply = await response.transform(utf8.decoder).join();
+                  print(reply);
+                  },
+                  child: Text('Send'),
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                ),
+              ],
+            )
+        )
     );
   }
-
 }
 
 void main() => runApp(
