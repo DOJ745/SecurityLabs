@@ -1,15 +1,17 @@
 package com.example.lb_4;
 
-import android.os.Bundle;
+import androidx.annotation.NonNull;
 
 import com.example.lwocryptocore.lcryptcore.CryptoCase;
 import com.example.lwocryptocore.lcryptcore.LCryptCore;
 
 import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.plugin.common.MethodChannel;
 
 public class MainActivity extends FlutterActivity {
 
-    private val CHANNEL = "samples.flutter.dev/android_hash";
+    private static final String CHANNEL = "samples.flutter.dev/android_hash";
 
     static
     {
@@ -26,31 +28,33 @@ public class MainActivity extends FlutterActivity {
                             // Note: this method is invoked on the main thread.
                             if (call.method.equals("getHash")) {
 
-                                String selectedAlgoritm = "sha256";
-                                String testMsg = "test";
-                                byte[] arrBytesForDigest = new byte[(int) testMsg.length()];
-                                arrBytesForDigest = testMsg.getBytes();
-
-                                CryptoCase cryptoCaseDigest = (new LCryptCore()).
-                                        CreateDigest(
-                                                selectedAlgoritm,
-                                                testMsg.getBytes(),
-                                                arrBytesForDigest.length);
-                                String myHash = bytesToHex(cryptoCaseDigest.digest);
-                                //int batteryLevel = getBatteryLevel();
-                                if (myHash != "") { result.success(myHash);
-                                } else {
-                                    result.error("ERROR!", "Somethings wrong with hash!", null);
+                                String hash = getHash(call.argument("hash"));
+                                if (!hash.equals("")) { result.success(hash); }
+                                else {
+                                    result.error("ERROR!",
+                                            "Somethings wrong with hash!", null);
                                 }
                             } else { result.notImplemented(); }
                         }
                 );
     }
 
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }*/
+    private String getHash(String msgToHash) {
+
+        String selectedAlgoritm = "sha256";
+        byte[] arrBytesForDigest = new byte[(int) msgToHash.length()];
+        arrBytesForDigest = msgToHash.getBytes();
+
+        CryptoCase cryptoCaseDigest = (
+                new LCryptCore()).
+                CreateDigest(
+                        selectedAlgoritm,
+                        msgToHash.getBytes(),
+                        arrBytesForDigest.length
+                );
+
+        return bytesToHex(cryptoCaseDigest.digest);
+    }
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 

@@ -61,7 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _getHash() async {
     String androidSHA256Hash;
     try {
-      final String result = await platform.invokeMethod('getHash');
+      Map map = { "hash" : "test"};
+      final String result = await platform.invokeMethod<String>('getHash', map);
       androidSHA256Hash = result;
     } on PlatformException catch (e) {
       androidSHA256Hash = "Failed to get hash: '${e.message}'.";
@@ -89,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-              child: Text('Get Battery Level'),
+              child: Text('Get hash'),
               onPressed: _getHash,
             ),
             Text(_androidSHA256Hash),
