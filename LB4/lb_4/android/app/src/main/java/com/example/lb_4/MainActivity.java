@@ -13,16 +13,16 @@ public class MainActivity extends FlutterActivity {
     {
         System.loadLibrary("cryptowrap");
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String selectedAlgoritm = "sha256";  // тип алгоритма хэширования
-        String testMsg = "test";                // входное сообщение для хэширования
+        String selectedAlgoritm = "sha256";
+        String testMsg = "test";
         byte[] arrBytesForDigest = new byte[(int) testMsg.length()];
         arrBytesForDigest = testMsg.getBytes();
 
-        // Функция вычисления хэш значения. результат в cryptoCaseDigest.digest
         CryptoCase cryptoCaseDigest = (new LCryptCore()).
                 CreateDigest(
                         selectedAlgoritm,
