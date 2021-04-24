@@ -73,7 +73,7 @@ class _HashGeneratorPageState extends State<MyHomePage> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Padding(
                   padding: EdgeInsets.all(5),
@@ -90,17 +90,7 @@ class _HashGeneratorPageState extends State<MyHomePage> {
                   child: ElevatedButton(
                       onPressed: onRandom,
                       child: Text(
-                          "Random",
-                          style: TextStyle(fontSize: 22)
-                      )
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: ElevatedButton(
-                      onPressed: reset,
-                      child: Text(
-                          "Reset",
+                          "Random HEX",
                           style: TextStyle(fontSize: 22)
                       )
                   ),
@@ -122,6 +112,16 @@ class _HashGeneratorPageState extends State<MyHomePage> {
                 ),
               ],
             ),
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: ElevatedButton(
+                  onPressed: reset,
+                  child: Text(
+                      "Reset Entropy",
+                      style: TextStyle(fontSize: 22)
+                  )
+              ),
+            ),
             Divider(thickness: 3.0),
             TextField(
               controller: _textHexController,
@@ -129,7 +129,7 @@ class _HashGeneratorPageState extends State<MyHomePage> {
               maxLines: 5,
               enabled: false,
               decoration: InputDecoration(
-                hintText: 'Hex String',
+                hintText: 'Result Hex String',
               ),
             ),
             TextField(
